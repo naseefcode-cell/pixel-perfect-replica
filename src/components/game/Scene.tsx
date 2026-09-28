@@ -1,4 +1,4 @@
-import { Html } from "@react-three/drei";
+import { Billboard } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -23,6 +23,61 @@ function colorFor(kind?: string) {
     default:
       return "#f5f0ff";
   }
+}
+
+function makeLabelTexture(text: string, dark: boolean) {
+  const pad = 18;
+  const c = document.createElement("canvas");
+  const ctx = c.getContext("2d")!;
+  const font = "700 40px 'DM Sans', system-ui, sans-serif";
+  ctx.font = font;
+  const w = Math.ceil(ctx.measureText(text).width) + pad * 2;
+  c.width = Math.max(64, w);
+  c.height = 84;
+  const g = c.getContext("2d")!;
+  g.font = font;
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  const r = 18;
+  g.fillStyle = dark ? "rgba(38,32,58,0.88)" : "#fff6e5";
+  g.beginPath();
+  g.roundRect(2, 2, c.width - 4, c.height - 4, r);
+  g.fill();
+  if (!dark) {
+    g.lineWidth = 5;
+    g.strokeStyle = "#4b3f6b";
+    g.stroke();
+  }
+  g.fillStyle = dark ? "#ffffff" : "#4b3f6b";
+  g.fillText(text, c.width / 2, c.height / 2 + 2);
+  const tex = new THREE.CanvasTexture(c);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  return tex;
+}
+
+function Label({
+  text,
+  position,
+  dark = false,
+  size = 0.3,
+}: {
+  text: string;
+  position: [number, number, number];
+  dark?: boolean;
+  size?: number;
+}) {
+  const tex = useMemo(() => makeLabelTexture(text, dark), [text, dark]);
+  useEffect(() => () => tex.dispose(), [tex]);
+  const aspect = tex.image ? (tex.image as HTMLCanvasElement).width / (tex.image as HTMLCanvasElement).height : 3;
+  return (
+    <Billboard position={position}>
+      <mesh renderOrder={5}>
+        <planeGeometry args={[size * aspect, size]} />
+        <meshBasicMaterial map={tex} transparent depthWrite={false} toneMapped={false} />
+      </mesh>
+    </Billboard>
+  );
 }
 
 function Geometry({ data }: { data: LevelData }) {
@@ -157,11 +212,7 @@ function Props({ data, levelId }: { data: LevelData; levelId: number }) {
                 <boxGeometry args={[0.05, 0.5, 0.05]} />
                 <meshStandardMaterial color="#8b7fa8" />
               </mesh>
-              <Html position={[0, 0.72, 0]} center zIndexRange={[5, 0]} occlude={false}>
-                <div className="rounded-md border-2 border-[#4b3f6b] bg-[#fff6e5] px-2 py-1 text-[10px] font-black whitespace-nowrap text-[#4b3f6b] shadow">
-                  {p.text}
-                </div>
-              </Html>
+              <Label text={p.text ?? ""} position={[0, 0.78, 0]} size={0.26} />
             </group>
           );
         }
@@ -172,11 +223,7 @@ function Props({ data, levelId }: { data: LevelData; levelId: number }) {
                 <capsuleGeometry args={[0.12, 0.16, 4, 10]} />
                 <meshStandardMaterial color="#5ec5ff" />
               </mesh>
-              <Html position={[0, 0.55, 0]} center zIndexRange={[5, 0]} occlude={false}>
-                <div className="rounded-full bg-[#26203a]/80 px-2 py-0.5 text-[9px] whitespace-nowrap text-white">
-                  {p.text}
-                </div>
-              </Html>
+              <Label text={p.text ?? ""} position={[0, 0.6, 0]} size={0.22} dark />
             </group>
           );
         }
