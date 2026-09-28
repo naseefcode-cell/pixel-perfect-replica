@@ -144,3 +144,55 @@ export function neighbours(edges: [number, number][], id: number): number[] {
   }
   return out;
 }
+
+/**
+ * When no route to the goal exists, the character keeps pacing the region it
+ * can reach, so the player can align a merge while it is anywhere on the path.
+ * Returns a step toward the farthest reachable node, avoiding an immediate
+ * bounce back to `avoid` unless there is nowhere else to go.
+ */
+export function wanderStep(
+  edges: [number, number][],
+  cluster: number[],
+  cur: number,
+  avoid: number,
+): Step | null {
+  const adj = new Map<number, { edge: [number, number]; to: number }[]>();
+  for (const [a, b] of edges) {
+    const ca = cluster[a];
+    const cb = cluster[b];
+    if (ca === cb) continue;
+    if (!adj.has(ca)) adj.set(ca, []);
+    if (!adj.has(cb)) adj.set(cb, []);
+    adj.get(ca)!.push({ edge: [a, b], to: cb });
+    adj.get(cb)!.push({ edge: [b, a], to: ca });
+  }
+  const startC = cluster[cur];
+  const options = (adj.get(startC) ?? []).filter((e) => e.edge[1] !== avoid);
+  const pool = options.length ? options : (adj.get(startC) ?? []);
+  if (!pool.length) return null;
+  // farthest-first: prefer the branch that leads furthest away
+  let best = pool[0];
+  let bestDepth = -1;
+  for (const opt of pool) {
+    const seen = new Set<number>([startC, opt.to]);
+    let frontier = [opt.to];
+    let depth = 0;
+    while (frontier.length && depth < 40) {
+      const next: number[] = [];
+      for (const c of frontier)
+        for (const e of adj.get(c) ?? [])
+          if (!seen.has(e.to)) {
+            seen.add(e.to);
+            next.push(e.to);
+          }
+      frontier = next;
+      depth++;
+    }
+    if (depth > bestDepth) {
+      bestDepth = depth;
+      best = opt;
+    }
+  }
+  return { from: best.edge[0], to: best.edge[1] };
+}
