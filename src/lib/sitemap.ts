@@ -84,7 +84,7 @@ export function sitemapXML(baseURL: string, entries: SitemapEntry[]): string {
     value.replace(
       /[&<>"']/g,
       (character) =>
-        ({ "&": "&", "<": "<", ">": ">", '"': """, "'": "'" })[character]!,
+        ({ "&": "\u0026amp;", "<": "\u0026lt;", ">": "\u0026gt;", '"': "\u0026quot;", "'": "\u0026apos;" })[character]!,
     );
   const seen = new Set<string>();
   const urls: string[] = [];
