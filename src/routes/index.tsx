@@ -23,7 +23,27 @@ export const Route = createFileRoute("/")({
           "30 hand-built optical-illusion levels. Rotate the camera, make impossible paths real, get pranked.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "VideoGame",
+          name: "MindTilt",
+          description:
+            "A browser perspective puzzle game with 30 levels: rotate the world to connect impossible paths.",
+          genre: ["Puzzle", "Casual"],
+          gamePlatform: "Web browser",
+          playMode: "SinglePlayer",
+          applicationCategory: "Game",
+          operatingSystem: "Any",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+        }),
+      },
     ],
   }),
   component: Page,
