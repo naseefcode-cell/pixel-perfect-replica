@@ -4,7 +4,14 @@ import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { cam, useGame } from "@/game/store";
-import { basisFor, clusterNodes, evalNode, nextStep, neighbours } from "@/game/perspective";
+import {
+  basisFor,
+  clusterNodes,
+  evalNode,
+  nextStep,
+  neighbours,
+  wanderStep,
+} from "@/game/perspective";
 import type { LevelData, Level, Vec3 } from "@/game/types";
 import { Character, type CharState } from "./Character";
 
@@ -283,6 +290,7 @@ function Player({ data, level }: { data: LevelData; level: Level }) {
     lastYaw: cam.yaw,
     rotAccum: 0,
     nagged: 0,
+    last: -1,
   });
 
   useEffect(() => {
@@ -298,6 +306,7 @@ function Player({ data, level }: { data: LevelData; level: Level }) {
       lastYaw: cam.yaw,
       rotAccum: 0,
       nagged: 0,
+      last: -1,
     };
     charState.current.emote = "idle";
   }, [data]);
@@ -439,8 +448,11 @@ function Player({ data, level }: { data: LevelData; level: Level }) {
     place(wp[S.cur]);
     const basis = basisFor(cam.yaw);
     const cl = clusterNodes(wp, basis);
-    const step = nextStep(data.edges, cl, S.cur, data.goal);
+    const step =
+      nextStep(data.edges, cl, S.cur, data.goal) ??
+      (S.stuckT > 0.6 ? wanderStep(data.edges, cl, S.cur, S.last) : null);
     if (step) {
+      S.last = S.cur;
       S.cur = step.from; // seamless perspective snap
       S.to = step.to;
       S.t = 0;
