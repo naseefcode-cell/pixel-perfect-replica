@@ -171,8 +171,8 @@ const m14: Make = () => {
 const m15: Make = () => {
   const b = new LB();
   const a = b.run([-4, 0, -2], [1, 0, 0], 3);
-  const c = b.run([-2, 2, 0], [1, 0, 0], 3);
-  const d = b.run([4, 3, 1], [0, 0, 1], 2);
+  const c = b.run([1, 2, 0], [1, 0, 0], 3);
+  const d = b.run([3, 3, 1], [0, 0, 1], 2);
   b.prop("monolith", [-1, 2, 4], "BIG");
   return b.build(a[0], d[d.length - 1]);
 };
@@ -199,7 +199,7 @@ const m17: Make = () => {
   const b = new LB();
   const a = b.run([-4, 0, 3], [1, 0, 0], 2);
   const c = b.run([0, 2, 5], [1, 0, 0], 1);
-  const d = b.run([3, 3, 4], [0, 0, -1], 3);
+  const d = b.run([2, 3, 4], [0, 0, -1], 3);
   b.prop("sign", [-4, 0.8, 3], "INVISIBLE BRIDGE");
   b.prop("duck", [1, 2.7, 5], undefined, true);
   return b.build(a[0], d[d.length - 1]);
@@ -314,8 +314,8 @@ const m26: Make = () => {
   const b = new LB();
   const a = b.run([-5, 0, -2], [1, 0, 0], 2);
   const p2 = b.run([-2, 1, -1], [1, 0, 0], 2);
-  const p3 = b.run([1, 2, 1], [0, 0, 1], 2);
-  const p4 = b.run([3, 3, 4], [1, 0, 0], 2);
+  const p3 = b.run([1, 2, 0], [0, 0, 1], 2);
+  const p4 = b.run([2, 3, 3], [1, 0, 0], 2);
   b.prop("sign", [-5, 0.8, -2], "EVERYTHING CONNECTS");
   return b.build(a[0], p4[p4.length - 1]);
 };
@@ -335,10 +335,10 @@ const m27: Make = () => {
 const m28: Make = () => {
   const b = new LB();
   const a = b.stair([-4, 0, -3], [1, 0, 0], 0.5, 4);
-  const c = b.stair([-1, 4, 0], [0, 0, 1], 0.5, 4);
-  const d = b.run([1, 6, 5], [1, 0, 0], 2);
+  const c = b.stair([2, 4, -1], [0, 0, 1], 0.5, 4);
+  const d = b.run([3, 7, 4], [1, 0, 0], 2);
   b.prop("sign", [-4, 0.8, -3], "THE IMPOSSIBLE STAIRCASE");
-  b.prop("duck", [3, 6.7, 5], undefined, true);
+  b.prop("duck", [5, 7.7, 4], undefined, true);
   return b.build(a[0], d[d.length - 1]);
 };
 
@@ -368,16 +368,16 @@ const m30b: Make = () => {
   const s = b.stair([-3, 1, -2], [1, 0, 0], 0.5, 3);
   const tower = b.chain(
     [
-      [1, 3, 0],
-      [2, 3, 0],
+      [1, 3.5, -1],
+      [2, 3.5, -1],
     ],
-    { spin: { cx: 1.5, cz: 0, speed: 0.35 } },
+    { spin: { cx: 1.5, cz: -1, speed: 0.35 } },
   );
-  const c = b.run([0, 4, 3], [0, 0, 1], 2);
+  const c = b.run([3, 4.5, 0], [0, 0, 1], 2);
   b.link(tower[1], c[0]);
-  const fin = b.run([2, 5, 6], [1, 0, 0], 2);
+  const fin = b.run([4, 5.5, 3], [1, 0, 0], 2);
   b.prop("button", [-6, 0.6, -2], "THE LAST BUTTON", true);
-  b.prop("duck", [4, 5.7, 6], undefined, true);
+  b.prop("duck", [6, 6.2, 3], undefined, true);
   return b.build(a[0], fin[fin.length - 1]);
 };
 
