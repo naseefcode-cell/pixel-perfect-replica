@@ -19,6 +19,11 @@
  */
 
 @theme inline {
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "DM Sans", sans-serif;
+  --color-ink: var(--ink);
+  --color-sky: var(--sky);
+  --shadow-pop: 0 6px 0 0 var(--ink);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -62,26 +67,28 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.129 0.042 264.695);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.129 0.042 264.695);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: oklch(0.208 0.042 265.755);
-  --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.208 0.042 265.755);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.704 0.04 256.788);
+  --radius: 0.9rem;
+  --ink: oklch(0.28 0.06 296);
+  --sky: oklch(0.93 0.05 300);
+  --background: oklch(0.96 0.025 300);
+  --foreground: oklch(0.28 0.06 296);
+  --card: oklch(0.995 0.008 90);
+  --card-foreground: oklch(0.28 0.06 296);
+  --popover: oklch(0.995 0.008 90);
+  --popover-foreground: oklch(0.28 0.06 296);
+  --primary: oklch(0.67 0.19 25);
+  --primary-foreground: oklch(0.99 0.01 90);
+  --secondary: oklch(0.9 0.06 200);
+  --secondary-foreground: oklch(0.28 0.06 296);
+  --muted: oklch(0.92 0.02 300);
+  --muted-foreground: oklch(0.52 0.05 296);
+  --accent: oklch(0.89 0.14 95);
+  --accent-foreground: oklch(0.28 0.06 296);
+  --destructive: oklch(0.6 0.22 20);
+  --destructive-foreground: oklch(0.99 0.01 90);
+  --border: oklch(0.86 0.03 300);
+  --input: oklch(0.86 0.03 300);
+  --ring: oklch(0.67 0.19 25);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -140,5 +147,99 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    overscroll-behavior: none;
+  }
+
+  h1,
+  h2,
+  .font-black {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 3px solid var(--ink);
+    background: var(--primary);
+    color: var(--primary-foreground);
+    padding: 0.6rem 1.4rem;
+    font-weight: 800;
+    box-shadow: var(--shadow-pop);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 3px solid var(--ink);
+    background: var(--card);
+    color: var(--foreground);
+    padding: 0.6rem 1.4rem;
+    font-weight: 800;
+    box-shadow: var(--shadow-pop);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .btn-chip {
+    display: inline-flex;
+    height: 2.6rem;
+    width: 2.6rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 3px solid var(--ink);
+    background: var(--card);
+    font-weight: 900;
+    box-shadow: 0 4px 0 0 var(--ink);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .btn-primary:hover,
+  .btn-ghost:hover,
+  .btn-chip:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:active,
+  .btn-ghost:active,
+  .btn-chip:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 0 var(--ink);
+  }
+}
+
+.confetti-bit {
+  position: absolute;
+  top: -10%;
+  width: 9px;
+  height: 16px;
+  border-radius: 2px;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.9;
   }
 }

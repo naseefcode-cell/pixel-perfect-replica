@@ -1,24 +1,52 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { GameCanvas } from "@/components/game/GameCanvas";
+import { HUD } from "@/components/game/HUD";
+import { LevelSelect, TitleScreen } from "@/components/game/Screens";
+import { useGame } from "@/game/store";
+
 export const Route = createFileRoute("/")({
-  component: Index,
+  ssr: false,
+  head: () => ({
+    meta: [
+      { title: "MindTilt — Perspective Puzzles That Troll You" },
+      {
+        name: "description",
+        content:
+          "Rotate the world, line up impossible platforms and guide a tiny confused hero through 30 perspective puzzles full of fake exits, useless buttons and hidden ducks.",
+      },
+      { property: "og:title", content: "MindTilt — Perspective Puzzles That Troll You" },
+      {
+        property: "og:description",
+        content:
+          "30 hand-built optical-illusion levels. Rotate the camera, make impossible paths real, get pranked.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Page,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Page() {
+  const screen = useGame((s) => s.screen);
+  const hydrate = useGame((s) => s.hydrate);
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <main className="fixed inset-0 overflow-hidden bg-background text-foreground">
+      {screen === "play" && (
+        <>
+          <GameCanvas />
+          <HUD />
+        </>
+      )}
+      {screen === "title" && <TitleScreen />}
+      {screen === "select" && <LevelSelect />}
+    </main>
   );
 }
