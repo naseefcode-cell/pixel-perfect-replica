@@ -24,7 +24,14 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "/" },
+      { property: "og:site_name", content: "MindTilt" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "MindTilt — Perspective Puzzles That Troll You" },
+      {
+        name: "twitter:description",
+        content:
+          "30 hand-built optical-illusion levels. Rotate the camera, make impossible paths real, get pranked.",
+      },
     ],
     links: [{ rel: "canonical", href: "/" }],
     scripts: [
