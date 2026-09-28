@@ -8,6 +8,7 @@ import { useGame } from "@/game/store";
 
 export const Route = createFileRoute("/")({
   ssr: false,
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "MindTilt — Perspective Puzzles That Troll You" },
