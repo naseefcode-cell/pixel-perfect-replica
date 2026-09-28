@@ -143,8 +143,8 @@ function Props({ data, levelId }: { data: LevelData; levelId: number }) {
                 <sphereGeometry args={[0.09, 12, 10]} />
                 <meshStandardMaterial color="#ffd60a" />
               </mesh>
-              <mesh position={[0, 0.13, 0.15]}>
-                <coneGeometry args={[0.04, 0.09, 6]} rotation={[Math.PI / 2, 0, 0]} />
+              <mesh position={[0, 0.13, 0.15]} rotation={[Math.PI / 2, 0, 0]}>
+                <coneGeometry args={[0.04, 0.09, 6]} />
                 <meshStandardMaterial color="#fb8500" />
               </mesh>
             </group>
