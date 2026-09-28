@@ -147,5 +147,99 @@
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
+    font-family: var(--font-sans);
+    overscroll-behavior: none;
+  }
+
+  h1,
+  h2,
+  .font-black {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 3px solid var(--ink);
+    background: var(--primary);
+    color: var(--primary-foreground);
+    padding: 0.6rem 1.4rem;
+    font-weight: 800;
+    box-shadow: var(--shadow-pop);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 3px solid var(--ink);
+    background: var(--card);
+    color: var(--foreground);
+    padding: 0.6rem 1.4rem;
+    font-weight: 800;
+    box-shadow: var(--shadow-pop);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .btn-chip {
+    display: inline-flex;
+    height: 2.6rem;
+    width: 2.6rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 3px solid var(--ink);
+    background: var(--card);
+    font-weight: 900;
+    box-shadow: 0 4px 0 0 var(--ink);
+    transition:
+      transform 0.12s ease,
+      box-shadow 0.12s ease;
+  }
+
+  .btn-primary:hover,
+  .btn-ghost:hover,
+  .btn-chip:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-primary:active,
+  .btn-ghost:active,
+  .btn-chip:active {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 0 var(--ink);
+  }
+}
+
+.confetti-bit {
+  position: absolute;
+  top: -10%;
+  width: 9px;
+  height: 16px;
+  border-radius: 2px;
+  animation-name: confetti-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0.9;
   }
 }
