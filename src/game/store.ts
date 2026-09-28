@@ -177,20 +177,20 @@ export const useGame = create<GameState>((set, get) => ({
 
 /** camera state lives outside React so useFrame can mutate it freely */
 export const cam = {
-  yaw: Math.PI * 0.25,
-  targetYaw: Math.PI * 0.25,
-  zoom: 52,
-  targetZoom: 52,
+  yaw: Math.PI * 0.1,
+  targetYaw: Math.PI * 0.1,
+  zoom: 74,
+  targetZoom: 74,
   dragging: false,
   shake: 0,
   punch: 0,
 };
 
 export function resetCam() {
-  cam.yaw = Math.PI * 0.25;
-  cam.targetYaw = Math.PI * 0.25;
-  cam.zoom = 52;
-  cam.targetZoom = 52;
+  cam.yaw = Math.PI * 0.1;
+  cam.targetYaw = Math.PI * 0.1;
+  cam.zoom = 74;
+  cam.targetZoom = 74;
   cam.dragging = false;
   cam.shake = 0;
   cam.punch = 0;

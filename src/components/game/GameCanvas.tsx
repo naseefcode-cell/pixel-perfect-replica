@@ -61,7 +61,7 @@ function useControls(el: React.RefObject<HTMLDivElement | null>) {
       cam.dragging = false;
     };
     const wheel = (e: WheelEvent) => {
-      cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom - e.deltaY * 0.05, 24, 110);
+      cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom - e.deltaY * 0.05, 32, 150);
     };
     const touchMove = (e: TouchEvent) => {
       if (e.touches.length === 2) {
@@ -70,7 +70,7 @@ function useControls(el: React.RefObject<HTMLDivElement | null>) {
           e.touches[0].clientY - e.touches[1].clientY,
         );
         if (pinch != null) {
-          cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom + (d - pinch) * 0.25, 24, 110);
+          cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom + (d - pinch) * 0.25, 32, 150);
         }
         pinch = d;
         cam.dragging = true;
@@ -95,9 +95,9 @@ function useControls(el: React.RefObject<HTMLDivElement | null>) {
       if (e.key === "ArrowLeft" || e.key === "a") cam.targetYaw += 0.12;
       if (e.key === "ArrowRight" || e.key === "d") cam.targetYaw -= 0.12;
       if (e.key === "ArrowUp" || e.key === "w")
-        cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom + 4, 24, 110);
+        cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom + 4, 32, 150);
       if (e.key === "ArrowDown" || e.key === "s")
-        cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom - 4, 24, 110);
+        cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom - 4, 32, 150);
       if (["ArrowLeft", "ArrowRight", "a", "d"].includes(e.key)) {
         cam.dragging = true;
         window.setTimeout(() => (cam.dragging = false), 180);

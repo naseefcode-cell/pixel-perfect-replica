@@ -157,7 +157,7 @@ function Props({ data, levelId }: { data: LevelData; levelId: number }) {
                 <boxGeometry args={[0.05, 0.5, 0.05]} />
                 <meshStandardMaterial color="#8b7fa8" />
               </mesh>
-              <Html position={[0, 0.72, 0]} center distanceFactor={9} zIndexRange={[5, 0]}>
+              <Html position={[0, 0.72, 0]} center zIndexRange={[5, 0]} occlude={false}>
                 <div className="rounded-md border-2 border-[#4b3f6b] bg-[#fff6e5] px-2 py-1 text-[10px] font-black whitespace-nowrap text-[#4b3f6b] shadow">
                   {p.text}
                 </div>
@@ -172,7 +172,7 @@ function Props({ data, levelId }: { data: LevelData; levelId: number }) {
                 <capsuleGeometry args={[0.12, 0.16, 4, 10]} />
                 <meshStandardMaterial color="#5ec5ff" />
               </mesh>
-              <Html position={[0, 0.55, 0]} center distanceFactor={10} zIndexRange={[5, 0]}>
+              <Html position={[0, 0.55, 0]} center zIndexRange={[5, 0]} occlude={false}>
                 <div className="rounded-full bg-[#26203a]/80 px-2 py-0.5 text-[9px] whitespace-nowrap text-white">
                   {p.text}
                 </div>
