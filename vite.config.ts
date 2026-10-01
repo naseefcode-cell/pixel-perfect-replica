@@ -19,7 +19,7 @@ function stripSourceTagsFrom3D(): Plugin {
     enforce: "post",
     apply: "serve",
     transform(code, id) {
-      if (!/src[\\/]components[\\/]game[\\/]/.test(id)) return null;
+      if (!/src[\\/](components[\\/]game[\\/]|routes[\\/]covers\.tsx)/.test(id)) return null;
       if (!code.includes("data-tsd-source")) return null;
       return {
         code: code.replace(/\s*"data-tsd-source":\s*"[^"]*",?/g, "").replace(
