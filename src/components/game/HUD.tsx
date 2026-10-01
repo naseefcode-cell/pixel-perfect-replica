@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { cam, resetCam, useGame } from "@/game/store";
 import { LEVELS } from "@/game/levels";
+import { PauseMenu, Tutorial } from "./Overlays";
 
 function fmt(t: number) {
   const s = Math.floor(t);
@@ -31,7 +32,7 @@ export function HUD() {
   const { level, phase, runFalls, runTime, toasts, save, swapped } = useGame();
   const restart = useGame((s) => s.restart);
   const next = useGame((s) => s.next);
-  const goSelect = useGame((s) => s.goSelect);
+  const setPaused = useGame((s) => s.setPaused);
   const confetti = useGame((s) => s.confetti);
   const [hint, setHint] = useState(false);
 
@@ -55,11 +56,12 @@ export function HUD() {
         </div>
 
         <div className="pointer-events-auto flex gap-2">
-          <button className="btn-chip" onClick={() => setHint((h) => !h)}>
+          <button className="btn-chip" aria-label="Hint" onClick={() => setHint((h) => !h)}>
             ?
           </button>
           <button
             className="btn-chip"
+            aria-label="Restart"
             onClick={() => {
               resetCam();
               restart();
@@ -67,11 +69,14 @@ export function HUD() {
           >
             ↺
           </button>
-          <button className="btn-chip" onClick={goSelect}>
-            ☰
+          <button className="btn-chip" aria-label="Pause" onClick={() => setPaused(true)}>
+            ❚❚
           </button>
         </div>
       </div>
+
+      <Tutorial />
+      <PauseMenu />
 
       {hint && (
         <div className="pointer-events-none absolute top-24 right-3 max-w-[240px] rounded-2xl border-2 border-ink/15 bg-accent px-3 py-2 text-xs font-bold text-accent-foreground shadow-pop sm:right-5">
@@ -92,7 +97,7 @@ export function HUD() {
 
       <div className="flex items-end justify-between">
         <div className="rounded-2xl bg-card/70 px-3 py-2 text-[11px] font-bold text-muted-foreground backdrop-blur">
-          Drag to rotate · scroll/pinch to zoom · R to restart
+          Drag or ←/→ to rotate · scroll/pinch to zoom · R restart · P pause
         </div>
         <button
           className="btn-chip pointer-events-auto sm:hidden"

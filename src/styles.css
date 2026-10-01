@@ -243,3 +243,23 @@
     opacity: 0.9;
   }
 }
+
+.kbd {
+  display: inline-flex;
+  min-width: 1.8rem;
+  justify-content: center;
+  border: 2px solid var(--ink);
+  border-radius: 0.5rem;
+  background: var(--card);
+  padding: 0.15rem 0.4rem;
+  box-shadow: 0 2px 0 0 var(--ink);
+}
+
+.tut-hand {
+  animation: tut-drag 1.8s ease-in-out infinite;
+}
+
+@keyframes tut-drag {
+  0%, 100% { left: 10%; }
+  50% { left: 70%; }
+}

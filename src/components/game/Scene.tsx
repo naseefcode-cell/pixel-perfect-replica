@@ -14,6 +14,7 @@ import {
 } from "@/game/perspective";
 import type { LevelData, Level, Vec3 } from "@/game/types";
 import { Character, type CharState } from "./Character";
+import { sfx } from "@/game/audio";
 
 const PLAT = { w: 0.92, h: 0.22, d: 0.92 };
 
@@ -328,6 +329,10 @@ function Player({ data, level }: { data: LevelData; level: Level }) {
       return;
     }
 
+    if (g.paused) {
+      place(wp[S.cur]);
+      return;
+    }
     g.tick(dt);
 
     // track camera rotation for jokes
@@ -405,6 +410,7 @@ function Player({ data, level }: { data: LevelData; level: Level }) {
             setTimeout(() => {
               useGame.getState().say("LOL. You thought.");
               useGame.getState().trollSwap();
+              sfx.troll();
               cam.shake = 0.6;
             }, 1100);
           } else {
@@ -420,6 +426,7 @@ function Player({ data, level }: { data: LevelData; level: Level }) {
             ],
           );
           g.fall();
+          sfx.fall();
           S.mode = "fall";
           cam.shake = 0.35;
           return;
@@ -452,6 +459,8 @@ function Player({ data, level }: { data: LevelData; level: Level }) {
       nextStep(data.edges, cl, S.cur, data.goal) ??
       (S.stuckT > 0.6 ? wanderStep(data.edges, cl, S.cur, S.last) : null);
     if (step) {
+      if (S.stuckT > 0.3) sfx.align();
+      else sfx.step();
       S.last = S.cur;
       S.cur = step.from; // seamless perspective snap
       S.to = step.to;

@@ -47,6 +47,7 @@ function useControls(el: React.RefObject<HTMLDivElement | null>) {
     let pinch: number | null = null;
 
     const down = (e: PointerEvent) => {
+      if (useGame.getState().paused) return;
       last = { x: e.clientX, y: e.clientY };
       cam.dragging = true;
     };
@@ -90,15 +91,22 @@ function useControls(el: React.RefObject<HTMLDivElement | null>) {
 
     const key = (e: KeyboardEvent) => {
       const s = useGame.getState();
-      if (e.key === "r" || e.key === "R") s.restart();
-      if (e.key === "Escape") s.goSelect();
-      if (e.key === "ArrowLeft" || e.key === "a") cam.targetYaw += 0.12;
-      if (e.key === "ArrowRight" || e.key === "d") cam.targetYaw -= 0.12;
-      if (e.key === "ArrowUp" || e.key === "w")
+      const c = e.code; // physical keys: WASD == ZQSD on AZERTY
+      if (c === "KeyP") {
+        s.setPaused(!s.paused);
+        return;
+      }
+      if (s.paused) return;
+      if (c === "KeyR") s.restart();
+      const left = c === "ArrowLeft" || c === "KeyA";
+      const right = c === "ArrowRight" || c === "KeyD";
+      if (left) cam.targetYaw += 0.12;
+      if (right) cam.targetYaw -= 0.12;
+      if (c === "ArrowUp" || c === "KeyW")
         cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom + 4, 32, 150);
-      if (e.key === "ArrowDown" || e.key === "s")
+      if (c === "ArrowDown" || c === "KeyS")
         cam.targetZoom = THREE.MathUtils.clamp(cam.targetZoom - 4, 32, 150);
-      if (["ArrowLeft", "ArrowRight", "a", "d"].includes(e.key)) {
+      if (left || right) {
         cam.dragging = true;
         window.setTimeout(() => (cam.dragging = false), 180);
       }
