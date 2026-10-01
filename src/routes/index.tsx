@@ -5,6 +5,8 @@ import { GameCanvas } from "@/components/game/GameCanvas";
 import { HUD } from "@/components/game/HUD";
 import { LevelSelect, TitleScreen } from "@/components/game/Screens";
 import { useGame } from "@/game/store";
+import { startMusic } from "@/game/audio";
+import { crazy, initCrazy } from "@/game/crazygames";
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -63,6 +65,13 @@ function Page() {
 
   useEffect(() => {
     hydrate();
+    void initCrazy().then(() => {
+      crazy.loadingStart();
+      crazy.loadingStop();
+    });
+    const unlock = () => startMusic();
+    window.addEventListener("pointerdown", unlock, { once: true });
+    window.addEventListener("keydown", unlock, { once: true });
   }, [hydrate]);
 
   return (
