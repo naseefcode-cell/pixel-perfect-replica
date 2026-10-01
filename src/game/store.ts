@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { LEVELS } from "./levels";
 import type { Level, LevelData } from "./types";
+import { sfx } from "./audio";
+import { crazy } from "./crazygames";
 
 const KEY = "mindtilt-save-v1";
 
@@ -58,6 +60,8 @@ interface GameState {
   confetti: boolean;
   toasts: Toast[];
   save: SaveData;
+  paused: boolean;
+  setPaused: (p: boolean) => void;
 
   hydrate: () => void;
   goTitle: () => void;
@@ -89,11 +93,23 @@ export const useGame = create<GameState>((set, get) => ({
   rotations: 0,
   confetti: false,
   toasts: [],
+  paused: false,
+  setPaused: (paused) => {
+    set({ paused });
+    if (paused) crazy.gameplayStop();
+    else if (get().phase === "playing") crazy.gameplayStart();
+  },
   save: { completed: [], best: {}, falls: 0, attempts: 0, secrets: [] },
 
   hydrate: () => set({ save: load(), hydrated: true }),
-  goTitle: () => set({ screen: "title", confetti: false }),
-  goSelect: () => set({ screen: "select", confetti: false }),
+  goTitle: () => {
+    crazy.gameplayStop();
+    set({ screen: "title", confetti: false, paused: false });
+  },
+  goSelect: () => {
+    crazy.gameplayStop();
+    set({ screen: "select", confetti: false, paused: false });
+  },
 
   play: (index) => {
     const level = LEVELS[index];
@@ -111,8 +127,10 @@ export const useGame = create<GameState>((set, get) => ({
       rotations: 0,
       confetti: false,
       toasts: [],
+      paused: false,
       save,
     });
+    crazy.gameplayStart();
   },
 
   restart: () => {
@@ -126,7 +144,8 @@ export const useGame = create<GameState>((set, get) => ({
       set({ screen: "select", confetti: false });
       return;
     }
-    get().play(i);
+    if (i % 3 === 0) crazy.midgame(() => get().play(i));
+    else get().play(i);
   },
 
   say: (text) => {
@@ -163,6 +182,8 @@ export const useGame = create<GameState>((set, get) => ({
     const next = { ...save, completed, best };
     persist(next);
     set({ phase: "won", confetti: true, save: next });
+    sfx.win();
+    crazy.gameplayStop();
   },
 
   findSecret: (key) => {
@@ -171,6 +192,7 @@ export const useGame = create<GameState>((set, get) => ({
     const next = { ...save, secrets: [...save.secrets, key] };
     persist(next);
     set({ save: next });
+    sfx.secret();
     get().say("🦆 Secret found!");
   },
 }));
